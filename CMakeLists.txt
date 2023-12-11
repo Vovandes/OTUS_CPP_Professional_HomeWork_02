@@ -12,11 +12,11 @@ configure_file(resources/version.hpp.in version.hpp)
 add_executable(
     ip_filter_cli 
     source/main.cpp
-    )
+)
 
 add_library(
     ip_filter 
-    source/ip_filter.hpp
+    source/ip_filter.cpp
 )
 
 # Add source to the include directories for the test target
