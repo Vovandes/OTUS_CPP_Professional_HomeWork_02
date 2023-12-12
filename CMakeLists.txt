@@ -29,24 +29,24 @@ target_link_libraries(ip_filter_cli PRIVATE
     ip_filter
 )
 
-# if(WITH_GTEST)
-#     find_package(GTest REQUIRED)
-#     enable_testing()
+if(WITH_GTEST)
+    find_package(GTest REQUIRED)
+    enable_testing()
 
-#     add_executable(test_ip_filter_gtest tests/test_ip_filter_gtest.cpp)
+    add_executable(test_ip_filter_gtest tests/test_ip_filter_gtest.cpp)
 
-#     set_target_properties(test_ip_filter_gtest PROPERTIES
-#         CXX_STANDARD 20
-#         CXX_STANDARD_REQUIRED ON
-#     )
+    set_target_properties(test_ip_filter_gtest PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+    )
 
-#     target_link_libraries(test_ip_filter_gtest
-# 	    GTest::gtest_main
-#         ip_filter
-#     )
+    target_link_libraries(test_ip_filter_gtest
+	    GTest::gtest_main
+        ip_filter
+    )
 
-#     gtest_discover_tests(test_ip_filter_gtest)
-# endif()
+    gtest_discover_tests(test_ip_filter_gtest)
+endif()
 
 if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
