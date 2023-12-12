@@ -8,13 +8,14 @@ project(ip_filter VERSION ${PROJECT_VERSION})
 option(WITH_GTEST "Whether to build Google test" OFF)
 
 configure_file(resources/version.hpp.in version.hpp)
+configure_file(resources/ip_filter.tsv.in ip_filter.tsv)
 
 add_executable(ip_filter_cli source/main.cpp)
 
 add_library(ip_filter source/ip_filter.cpp)
 
 # Add source to the include directories for the test target
-target_include_directories(ip_filter PRIVATE include)
+target_include_directories(ip_filter_cli PRIVATE include)
 target_include_directories(ip_filter PRIVATE "${CMAKE_BINARY_DIR}")
 
 set_target_properties(ip_filter PROPERTIES
