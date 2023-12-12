@@ -5,37 +5,21 @@ set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
 project(ip_filter VERSION ${PROJECT_VERSION})
 
-option(WITH_GTEST "Whether to build Google test" ON)
+option(WITH_GTEST "Whether to build Google test" OFF)
 
 configure_file(resources/version.hpp.in version.hpp)
 
-add_executable(
-    ip_filter_cli 
-    source/main.cpp
-)
+add_executable(ip_filter_cli source/main.cpp)
 
-add_library(
-    ip_filter 
-    source/ip_filter.cpp
-)
+add_library(ip_filter source/ip_filter.cpp)
 
 # Add source to the include directories for the test target
-target_include_directories(
-    ip_filter PRIVATE 
-    "${CMAKE_CURRENT_SOURCE_DIR}/source"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include"
-)
+target_include_directories(ip_filter PRIVATE include)
+target_include_directories(ip_filter PRIVATE "${CMAKE_BINARY_DIR}")
 
-set_target_properties(ip_filter_cli ip_filter PROPERTIES
+set_target_properties(ip_filter PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
-)
-
-target_include_directories(ip_filter
-    PRIVATE "${CMAKE_BINARY_DIR}"
-    PRIVATE include
-    PRIVATE resources
-    PRIVATE tests
 )
 
 target_link_libraries(ip_filter_cli PRIVATE
@@ -54,7 +38,7 @@ if(WITH_GTEST)
     )
 
     target_link_libraries(test_ip_filter_gtest
-	GTest::gtest_main
+	    GTest::gtest_main
         ip_filter
     )
 
@@ -79,7 +63,7 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     )
 endif()
 
-install(TARGETS ip_filter_cli RUNTIME DESTINATION bin)
+install(TARGETS ip_filter RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
