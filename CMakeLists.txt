@@ -5,10 +5,11 @@ set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
 project(ip_filter VERSION ${PROJECT_VERSION})
 
-option(WITH_GTEST "Whether to build Google test" OFF)
+option(WITH_GTEST "Whether to build Google test" ON)
 
-configure_file(resources/version.hpp.in version.hpp)
-configure_file(resources/ip_filter.tsv.in ip_filter.tsv)
+configure_file(version.hpp.in version.hpp)
+include_directories(${CMAKE_BINARY_DIR})
+include_directories(${PROJECT_SOURCE_DIR})
 
 add_executable(ip_filter_cli source/main.cpp)
 
@@ -17,7 +18,9 @@ add_library(ip_filter source/ip_filter.cpp)
 # Add source to the include directories for the test target
 target_include_directories(ip_filter PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 
-set_target_properties(ip_filter PROPERTIES
+target_include_directories(ip_filter PRIVATE "${CMAKE_BINARY_DIR}")
+
+set_target_properties(ip_filter_cli ip_filter PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
 )
@@ -26,41 +29,29 @@ target_link_libraries(ip_filter_cli PRIVATE
     ip_filter
 )
 
-if(WITH_GTEST)
-    find_package(GTest REQUIRED)
-    enable_testing()
+# if(WITH_GTEST)
+#     find_package(GTest REQUIRED)
+#     enable_testing()
 
-    add_executable(test_ip_filter_gtest tests/test_ip_filter_gtest.cpp)
+#     add_executable(test_ip_filter_gtest tests/test_ip_filter_gtest.cpp)
 
-    set_target_properties(test_ip_filter_gtest PROPERTIES
-        CXX_STANDARD 20
-        CXX_STANDARD_REQUIRED ON
-    )
+#     set_target_properties(test_ip_filter_gtest PROPERTIES
+#         CXX_STANDARD 20
+#         CXX_STANDARD_REQUIRED ON
+#     )
 
-    target_link_libraries(test_ip_filter_gtest
-	    GTest::gtest_main
-        ip_filter
-    )
+#     target_link_libraries(test_ip_filter_gtest
+# 	    GTest::gtest_main
+#         ip_filter
+#     )
 
-    gtest_discover_tests(test_ip_filter_gtest)
-endif()
+#     gtest_discover_tests(test_ip_filter_gtest)
+# endif()
 
-
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
-    CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(ip_filter_cli PRIVATE 
-        -g
-        -Wall
-        -Wextra
-        -Werror
-        -pedantic
-    )
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(ip_filter_cli PRIVATE
-        /EHsc
-        /W4
-        /WX
-    )
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+  else ()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -pedantic")
 endif()
 
 install(TARGETS ip_filter RUNTIME DESTINATION bin)

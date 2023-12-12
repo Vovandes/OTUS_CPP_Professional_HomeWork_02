@@ -14,8 +14,8 @@
 int main(int, char const* []) {
 	try {
 
-		std::ifstream in{ "ip_filter.tsv" };
-		std::cin.rdbuf(in.rdbuf());
+		// std::ifstream in{ "ip_filter.tsv" };
+		// std::cin.rdbuf(in.rdbuf());
 
 		auto ip_pool{ input_ip() };
 

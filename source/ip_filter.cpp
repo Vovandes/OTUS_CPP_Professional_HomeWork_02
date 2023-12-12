@@ -13,7 +13,7 @@ std::vector<std::vector<std::string>> input_ip() {
 		tmp_ip.push_back(split(v.at(0), '.'));
 	}
 
-	return std::move(tmp_ip);
+	return tmp_ip;
 }
 
 std::vector<std::string> split(const std::string& str, char d) {
@@ -57,5 +57,5 @@ std::vector<std::vector<int>> vector_string_to_int(std::vector<std::vector<std::
 		tmp_container.push_back(to_int(elem));
 	}
 
-	return std::move(tmp_container);
+	return tmp_container;
 }
