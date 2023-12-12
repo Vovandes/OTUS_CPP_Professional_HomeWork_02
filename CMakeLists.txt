@@ -15,8 +15,7 @@ add_executable(ip_filter_cli source/main.cpp)
 add_library(ip_filter source/ip_filter.cpp)
 
 # Add source to the include directories for the test target
-target_include_directories(ip_filter_cli PRIVATE include)
-target_include_directories(ip_filter PRIVATE "${CMAKE_BINARY_DIR}")
+target_include_directories(ip_filter PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 
 set_target_properties(ip_filter PROPERTIES
     CXX_STANDARD 20
