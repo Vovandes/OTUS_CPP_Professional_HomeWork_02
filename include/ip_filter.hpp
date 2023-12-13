@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <tuple>
 
-//int version();
+int version();
 
 // Input IP:
 std::vector<std::vector<std::string>> input_ip();
