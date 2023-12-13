@@ -6,7 +6,6 @@
 #include <vector>
 #include <charconv> //C++17
 #include <algorithm>
-#include <tuple>
 
 int version();
 
@@ -18,10 +17,7 @@ std::vector<std::string> split(const std::string& str, char d);
 
 // Print Functions:
 template<typename Q>
-auto print_ip(std::vector<Q>& Container, const std::string_view msg = "") {
-	if (!msg.empty()) {
-		std::cout << msg << std::endl;
-	}
+auto print_ip(const std::vector<Q>& Container) {
 	for (auto ip = Container.cbegin(); ip != Container.cend(); ++ip) {
 		for (auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part) {
 			if (ip_part != ip->cbegin()) {
@@ -31,11 +27,6 @@ auto print_ip(std::vector<Q>& Container, const std::string_view msg = "") {
 		}
 		std::cout << std::endl;
 	}
-}
-
-template<typename Q, typename W>
-auto print_ip(std::tuple<std::vector<Q>, W>&& Container) {
-	print_ip(std::get<0>(Container), std::get<1>(Container));
 }
 
 // Convert String To Int:
@@ -69,10 +60,7 @@ auto filter(const std::vector<Q>& Container, Args const& ... args) {
 			return is_true_flag;
 		});
 
-	std::string tmp_msg{ "Filter by / " };
-	std::for_each(tmp_vector.cbegin(), tmp_vector.cend(), [&tmp_msg](const auto& x) { tmp_msg += std::to_string(x) + " / ";  });
-
-	return std::tuple{ tmp_container , std::string{tmp_msg} };
+	return tmp_container;
 }
 
 template<typename Q>
@@ -82,7 +70,5 @@ auto filter_any(const std::vector<Q>& Container, uint8_t byte) {
 	std::copy_if(Container.cbegin(), Container.cend(), std::back_inserter(tmp_container),
 		[byte](const auto& elem) { return std::find(elem.cbegin(), elem.cend(), byte) != elem.cend(); });
 
-	return std::tuple{ tmp_container , std::string{"Filter by any byte " + std::to_string(byte)} };
+	return tmp_container;
 }
-
-//#include "ip_filter.ipp"
